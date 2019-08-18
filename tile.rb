@@ -10,4 +10,8 @@ class Tile
     @value
   end
 
+  def increment
+    @value += 1
+  end
+
 end
