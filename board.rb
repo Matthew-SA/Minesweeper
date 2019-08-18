@@ -1,5 +1,5 @@
 require_relative "tile.rb"
-
+require "byebug"
 class Board
   attr_reader :grid
 
@@ -14,11 +14,33 @@ class Board
 
   def seed_bombs(bombs)
     while bombs > 0
-      selected_tile = @grid[rand(@size)][rand(@size)]
+      row = rand(@size)
+      col = rand(@size)
+      selected_tile = @grid[row][col]
       if !selected_tile.bomb
         selected_tile.seed_bomb
+        increment_adjacent(row,col)
         bombs -= 1
       end
+    end
+  end
+
+  def find_neighbors(row, col)
+    neighbors = []
+    (row-1..row+1).each do |y|
+      next if y < 0 || y >= @size
+      (col-1..col+1).each do |x|
+        next if x < 0 || x >= @size
+        neighbors << [y,x]
+      end
+    end
+    neighbors
+  end
+
+  def increment_adjacent(row, col)
+    neighbors = find_neighbors(row,col)
+    neighbors.each do |pair|
+      @grid[pair[0]][pair[1]].increment
     end
   end
 
@@ -54,7 +76,5 @@ class Board
 
 end
 
-game = Board.new(9, 3)
+game = Board.new(5, 1)
 game.render
-game["B0"] = 4
-game["B0"]
