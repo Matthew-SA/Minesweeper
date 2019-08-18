@@ -9,8 +9,18 @@ class Board
     @size = size
     @grid = Array.new(size) { Array.new(size) { Tile.new }}
     @bomb_count = bomb_count
+    self.seed_bombs(bomb_count)
   end
 
+  def seed_bombs(bombs)
+    while bombs > 0
+      selected_tile = @grid[rand(@size)][rand(@size)]
+      if !selected_tile.bomb
+        selected_tile.seed_bomb
+        bombs -= 1
+      end
+    end
+  end
 
   def render
     system("clear")
@@ -33,15 +43,13 @@ class Board
   def [](pos)
     col = @alpha.find_index(pos[0])
     row = pos[1].to_i
-    p col
-    p row
-    p @grid[row][col]
+    @grid[row][col]
   end
 
   def []=(pos, value)
     col = @alpha.find_index(pos[0])
     row = pos[1].to_i
-    @grid[row][col].value = value
+    @grid[row][col] = value
   end
 
 end

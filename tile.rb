@@ -1,4 +1,5 @@
 class Tile
+  attr_reader :bomb
   def initialize
     @value = 0
     @hidden = true
@@ -12,6 +13,10 @@ class Tile
 
   def increment
     @value += 1
+  end
+
+  def seed_bomb
+    @bomb = true
   end
 
 end
