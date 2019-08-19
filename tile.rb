@@ -1,26 +1,24 @@
 class Tile
-  
+
   attr_reader :bomb
   def initialize
     @value = 0
-    # @hidden = true
+    @hidden = true
     @bomb = false
-    # @flag = false
+    @flag = false
   end
 
   def to_s
-    if @bomb
-      "X"
-    elsif @value == 0
-      " "
+    if @hidden
+      "☐"
     elsif @bomb
       "X"
-    elsif @hidden
-      @value
     else
-      @value
+      @value == 0 ? " " : @value
     end
   end
+
+
 
   def increment
     @value += 1
@@ -28,6 +26,10 @@ class Tile
 
   def seed_bomb
     @bomb = true
+  end
+
+  def reveal
+    @hidden = false
   end
 
 end

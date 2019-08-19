@@ -9,7 +9,6 @@ class Board
     @size = size
     @grid = Array.new(size) { Array.new(size) { Tile.new }}
     @bomb_count = bomb_count
-    self.seed_bombs(bomb_count)
   end
 
   def seed_bombs(bombs)
@@ -62,6 +61,12 @@ class Board
     puts
   end
 
+  def flip_tile(pos)
+    col = @alpha.find_index(pos[0].upcase)
+    row = pos[1].to_i
+    @grid[row][col].reveal
+  end
+
   def [](pos)
     col = @alpha.find_index(pos[0])
     row = pos[1].to_i
@@ -76,5 +81,6 @@ class Board
 
 end
 
-game = Board.new(5, 1)
-game.render
+# game = Board.new(9, 5)
+# # game["A1"]= 3
+# game.render
