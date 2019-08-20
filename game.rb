@@ -1,5 +1,5 @@
 require_relative "board"
-
+require_relative "tile"
 class Game
   def initialize(size, bomb_count)
     @board = Board.new(size, bomb_count)
@@ -9,16 +9,16 @@ class Game
   end
 
   def run
-    while !self.end?
+    while !end?
       @board.render
-      pos = convert_coordinate(request_coordinate)
-      p pos
+      pos = convert_coordinate(get_coordinate)
       @board.flip_tile(pos)
+      p @board.safe_tiles
       sleep(2)
     end
   end
 
-  def request_coordinate
+  def get_coordinate
     print "Select a square's coordinate: "
     coordinate = gets.chomp
   end
@@ -29,21 +29,26 @@ class Game
     [row, col]
   end
 
-  def select_tile
-
-  end
-
   def end?
-    false
+    self.won? || self.lose?
   end
 
   def won?
-
+    if @board.safe_tiles <= 0
+      @board.render
+      puts "You win!"
+      true
+    end
   end
 
   def lose?
-    
+    if @board.triggered_bomb
+      @board.reveal_bombs
+      @board.render
+      puts "You lose!"
+      true
+    end
   end
 end
 
-game = Game.new(9, 8)
+game = Game.new(9, 2)

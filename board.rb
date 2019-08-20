@@ -1,14 +1,15 @@
 require_relative "tile.rb"
 require "byebug"
 class Board
-  attr_reader :grid
+  attr_reader :grid, :safe_tiles, :triggered_bomb
 
   def initialize(size, bomb_count)
     raise "Board size too large" if size > 26
     @alpha = ("A".."Z").to_a
     @size = size
     @grid = Array.new(size) { Array.new(size) { Tile.new }}
-    @bomb_count = bomb_count
+    @safe_tiles = size * size - bomb_count
+    @triggered_bomb = false
   end
 
   def seed_bombs(bombs)
@@ -65,13 +66,23 @@ class Board
 
   def flip_tile(pos)
     tile = self[pos]
+    return @triggered_bomb = true if tile.bomb
     if tile.hidden && !tile.flag
       tile.reveal
+      @safe_tiles -= 1
       if tile.value == 0
         neighbors = find_neighbors(pos)
         neighbors.each do |n_pos|
           flip_tile(n_pos)
         end
+      end
+    end
+  end
+
+  def reveal_bombs
+    @grid.each do |row|
+      row.each do |tile|
+        tile.reveal if tile.bomb
       end
     end
   end
@@ -87,6 +98,5 @@ class Board
     col = pos[1].to_i
     @grid[row][col] = value
   end
-
 
 end
