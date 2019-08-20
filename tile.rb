@@ -1,6 +1,6 @@
 class Tile
 
-  attr_reader :value, :hidden, :flag, :bomb
+  attr_reader :hidden, :flag, :bomb
   def initialize
     @value = 0
     @hidden = true
@@ -18,9 +18,11 @@ class Tile
     end
   end
 
+  def empty?
+    @value == 0
+  end
 
-
-  def increment
+  def increment_val
     @value += 1
   end
 

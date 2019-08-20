@@ -1,7 +1,7 @@
 require_relative "tile.rb"
 require "byebug"
 class Board
-  attr_reader :grid, :safe_tiles, :triggered_bomb
+  attr_reader :safe_tiles, :triggered_bomb
 
   def initialize(size, bomb_count)
     raise "Board size too large" if size > 26
@@ -42,7 +42,7 @@ class Board
   def increment_adjacent(pos)
     neighbors = find_neighbors(pos)
     neighbors.each do |n_pos|
-      self[n_pos].increment
+      self[n_pos].increment_val
     end
   end
 
@@ -70,7 +70,7 @@ class Board
     if tile.hidden && !tile.flag
       tile.reveal
       @safe_tiles -= 1
-      if tile.value == 0
+      if tile.empty?
         neighbors = find_neighbors(pos)
         neighbors.each do |n_pos|
           flip_tile(n_pos)

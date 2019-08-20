@@ -2,6 +2,7 @@ require_relative "board"
 require_relative "tile"
 class Game
   def initialize(size, bomb_count)
+    raise "Bomb count must be larger than 0" if bomb_count <= 0
     @board = Board.new(size, bomb_count)
     @board.seed_bombs(bomb_count)
     @alpha = ("A".."Z").to_a
@@ -13,7 +14,6 @@ class Game
       @board.render
       pos = convert_coordinate(get_coordinate)
       @board.flip_tile(pos)
-      p @board.safe_tiles
       sleep(2)
     end
   end
