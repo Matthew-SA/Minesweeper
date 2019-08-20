@@ -24,9 +24,9 @@ class Game
   end
 
   def convert_coordinate(coordinate)
-    col = @alpha.find_index(coordinate[0].upcase)
-    row = coordinate[1..-1].to_i
-    [col, row]
+    row = @alpha.find_index(coordinate[0].upcase)
+    col = coordinate[1..-1].to_i
+    [row, col]
   end
 
   def select_tile
@@ -46,4 +46,4 @@ class Game
   end
 end
 
-game = Game.new(9, 10)
+game = Game.new(9, 8)

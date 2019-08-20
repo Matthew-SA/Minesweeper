@@ -25,8 +25,8 @@ class Board
   end
 
   def find_neighbors(pos)
-    col = pos[0]
-    row = pos[1]
+    row = pos[0]
+    col = pos[1]
     neighbors = []
     (row-1..row+1).each do |y|
       next if y < 0 || y >= @size
@@ -67,35 +67,24 @@ class Board
     tile = self[pos]
     if tile.hidden && !tile.flag
       tile.reveal
-    # neighbors = find_neighbors(row, col)
-    # neighbors.each do |neighbor_pos|
-    #   neighbor_pos.reveal
+      neighbors = find_neighbors(pos)
+      neighbors.each do |n_pos|
+        self[n_pos].reveal
+      end
     end
   end
 
   def [](pos)
-    col = pos[0].to_i
-    row = pos[1].to_i
+    row = pos[0].to_i
+    col = pos[1].to_i
     @grid[row][col]
   end
 
   def []=(pos, value)
-    col = pos[0].to_i
-    row = pos[1].to_i
+    row = pos[0].to_i
+    col = pos[1].to_i
     @grid[row][col] = value
   end
 
-
-  # def [](pos)
-  #   col = @alpha.find_index(pos[0].upcase)
-  #   row = pos[1].to_i
-  #   @grid[row][col]
-  # end
-
-  # def []=(pos, value)
-  #   col = @alpha.find_index(pos[0])
-  #   row = pos[1].to_i
-  #   @grid[row][col] = value
-  # end
 
 end
