@@ -24,8 +24,8 @@ class Game
   end
 
   def convert_coordinate(coordinate)
-    row = @alpha.find_index(coordinate[0].upcase)
-    col = coordinate[1..-1].to_i
+    col = @alpha.find_index(coordinate[0].upcase)
+    row = coordinate[1..-1].to_i
     [row, col]
   end
 

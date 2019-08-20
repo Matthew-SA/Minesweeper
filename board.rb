@@ -67,9 +67,11 @@ class Board
     tile = self[pos]
     if tile.hidden && !tile.flag
       tile.reveal
-      neighbors = find_neighbors(pos)
-      neighbors.each do |n_pos|
-        self[n_pos].reveal
+      if tile.value == 0
+        neighbors = find_neighbors(pos)
+        neighbors.each do |n_pos|
+          flip_tile(n_pos)
+        end
       end
     end
   end

@@ -3,7 +3,7 @@ class Tile
   attr_reader :value, :hidden, :flag, :bomb
   def initialize
     @value = 0
-    # @hidden = true
+    @hidden = true
     @bomb = false
     @flag = false
   end
