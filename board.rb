@@ -18,13 +18,15 @@ class Board
       selected_tile = @grid[row][col]
       if !selected_tile.bomb
         selected_tile.seed_bomb
-        increment_adjacent(row,col)
+        increment_adjacent([row,col])
         bombs -= 1
       end
     end
   end
 
-  def find_neighbors(row, col)
+  def find_neighbors(pos)
+    col = pos[0]
+    row = pos[1]
     neighbors = []
     (row-1..row+1).each do |y|
       next if y < 0 || y >= @size
@@ -36,10 +38,10 @@ class Board
     neighbors
   end
 
-  def increment_adjacent(row, col)
-    neighbors = find_neighbors(row,col)
-    neighbors.each do |pair|
-      @grid[pair[0]][pair[1]].increment
+  def increment_adjacent(pos)
+    neighbors = find_neighbors(pos)
+    neighbors.each do |n_pos|
+      self[n_pos].increment
     end
   end
 
@@ -62,25 +64,38 @@ class Board
   end
 
   def flip_tile(pos)
-    col = @alpha.find_index(pos[0].upcase)
-    row = pos[1].to_i
-    @grid[row][col].reveal
+    tile = self[pos]
+    if tile.hidden && !tile.flag
+      tile.reveal
+    # neighbors = find_neighbors(row, col)
+    # neighbors.each do |neighbor_pos|
+    #   neighbor_pos.reveal
+    end
   end
 
   def [](pos)
-    col = @alpha.find_index(pos[0])
+    col = pos[0].to_i
     row = pos[1].to_i
     @grid[row][col]
   end
 
   def []=(pos, value)
-    col = @alpha.find_index(pos[0])
+    col = pos[0].to_i
     row = pos[1].to_i
     @grid[row][col] = value
   end
 
-end
 
-# game = Board.new(9, 5)
-# # game["A1"]= 3
-# game.render
+  # def [](pos)
+  #   col = @alpha.find_index(pos[0].upcase)
+  #   row = pos[1].to_i
+  #   @grid[row][col]
+  # end
+
+  # def []=(pos, value)
+  #   col = @alpha.find_index(pos[0])
+  #   row = pos[1].to_i
+  #   @grid[row][col] = value
+  # end
+
+end
