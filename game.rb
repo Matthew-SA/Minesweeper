@@ -5,22 +5,43 @@ class Game
     raise "Bomb count must be larger than 0" if bomb_count <= 0
     @board = Board.new(size, bomb_count)
     @board.seed_bombs(bomb_count)
-    @alpha = ("A".."Z").to_a
+    @alpha = ("A"..("A".ord + size).chr).to_a
     self.run
   end
 
   def run
     while !end?
       @board.render
-      pos = convert_coordinate(get_coordinate)
-      @board.flip_tile(pos)
-      sleep(2)
+      input = get_input
+      next if !valid_input?(input)
+      if input == "mode"
+        @board.toggle_flag_mode
+        next
+      else
+        pos = convert_coordinate(input)
+        @board.flip_tile(pos)
+      end
+        sleep(1)
     end
   end
 
-  def get_coordinate
-    print "Select a square's coordinate: "
-    coordinate = gets.chomp
+  def toggle_flag_mode
+    @flag_mode = !@flag_mode
+  end
+
+  def get_input
+      print "Mode: "
+      print @board.flag_mode ? "**Place flags**" : "**Reveal tiles**"
+      puts
+      print "Enter coordinate (e.g. a9) or type 'mode' to toggle selection behavior: "
+      input = gets.chomp
+  end
+
+  def valid_input?(input)
+    return true if "flag"
+    return true if @alpha.include?(input) && input[1..-1].to_i > 0 && input[1..-1].to_i < @size -1
+    puts "Invalid input!"
+    false
   end
 
   def convert_coordinate(coordinate)
@@ -51,4 +72,4 @@ class Game
   end
 end
 
-game = Game.new(9, 2)
+game = Game.new(9, 5)

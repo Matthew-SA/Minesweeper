@@ -9,7 +9,9 @@ class Tile
   end
 
   def to_s
-    if @hidden
+    if @flag
+      "P"
+    elsif @hidden
       "☐"
     elsif @bomb
       "X"
@@ -32,6 +34,10 @@ class Tile
 
   def reveal
     @hidden = false
+  end
+
+  def toggle_flag
+    @flag = !@flag
   end
 
 end
