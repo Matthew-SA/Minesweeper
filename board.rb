@@ -1,5 +1,5 @@
 require_relative "tile.rb"
-require "byebug"
+
 class Board
   attr_reader :safe_tiles, :triggered_bomb, :flag_mode
 
@@ -49,6 +49,8 @@ class Board
   def render
     system("clear")
     puts "    Minesweeper "
+    print "    Mode: "
+    puts @flag_mode ? "**Place flags**" : "**Reveal tiles**"
     puts "   +" + ("-" * (2 * @size - 1)) + "+"
     @grid.each_with_index do |row, row_idx|
       print row_idx < 10 ? " #{row_idx} |" : "#{row_idx} |" 
@@ -88,7 +90,10 @@ class Board
   def reveal_bombs
     @grid.each do |row|
       row.each do |tile|
-        tile.reveal if tile.bomb
+        if tile.bomb
+          tile.reveal
+          tile.toggle_flag if tile.flag
+        end
       end
     end
   end
