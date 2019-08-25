@@ -1,3 +1,4 @@
+require "colorize"
 class Tile
 
   attr_reader :hidden, :flag, :bomb
@@ -6,17 +7,27 @@ class Tile
     @hidden = true
     @bomb = false
     @flag = false
+    @colors = {
+      1 => "1".light_blue,
+      2 => "2".light_green,
+      3 => "3".magenta,
+      4 => "4".cyan,
+      5 => "5".blue,
+      6 => "6".green,
+      7 => "7".light_magenta,
+      8 => "8".magenta,
+    }
   end
 
   def to_s
     if @flag
-      "P"
+      "P".yellow
     elsif @hidden
       "☐"
     elsif @bomb
-      "X"
+      "X".red
     else
-      @value == 0 ? " " : @value
+      @value == 0 ? " " : @colors[@value]
     end
   end
 
@@ -27,6 +38,7 @@ class Tile
   def increment_val
     @value += 1
   end
+
 
   def seed_bomb
     @bomb = true

@@ -1,5 +1,5 @@
 require_relative "tile.rb"
-
+require "colorize"
 class Board
   attr_reader :safe_tiles, :triggered_bomb, :flag_mode
 
@@ -49,8 +49,7 @@ class Board
   def render
     system("clear")
     puts "    Minesweeper "
-    print "    Mode: "
-    puts @flag_mode ? "**Place flags**" : "**Reveal tiles**"
+    puts @flag_mode ? "    Flag mode".red : "    Flip tile mode".red
     puts "   +" + ("-" * (2 * @size - 1)) + "+"
     @grid.each_with_index do |row, row_idx|
       print row_idx < 10 ? " #{row_idx} |" : "#{row_idx} |" 

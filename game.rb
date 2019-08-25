@@ -93,4 +93,4 @@ class Game
   end
 end
 
-game = Game.new(9, 5)
+game = Game.new(10, 20)
