@@ -42,10 +42,10 @@ class Game
   end
 
   def valid_input?(input)
-    return true if "mode"
-    return true if "save"
-    return true if "load"
-    return true if @alpha.include?(input[0]) && input[1..-1].to_i > 0 && input[1..-1].to_i < @size -1
+    return true if input == "mode"
+    return true if input == "save"
+    return true if input == "load"
+    return true if @alpha.include?(input[0].upcase) && input[1..-1].to_i >= 0 && input[1..-1].to_i < (@board.size)
     puts "Invalid input!"
     sleep(2)
     false

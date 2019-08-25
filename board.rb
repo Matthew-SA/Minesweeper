@@ -1,7 +1,7 @@
 require_relative "tile.rb"
 require "colorize"
 class Board
-  attr_reader :safe_tiles, :triggered_bomb, :flag_mode
+  attr_reader :safe_tiles, :triggered_bomb, :flag_mode, :size
 
   def initialize(size, bomb_count)
     @alpha = ("A"..("A".ord + size).chr).to_a
