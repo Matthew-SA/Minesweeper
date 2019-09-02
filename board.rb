@@ -1,7 +1,10 @@
 require_relative "tile.rb"
 require "colorize"
+require "remedy"
 class Board
-  attr_reader :safe_tiles, :triggered_bomb, :flag_mode, :size
+  include Remedy
+  attr_accessor :current_coord
+  attr_reader :safe_tiles, :triggered_bomb, :flag_mode, :size, :image
 
   def initialize(size, bomb_count)
     @alpha = ("A"..("A".ord + size).chr).to_a
@@ -10,6 +13,8 @@ class Board
     @safe_tiles = size * size - bomb_count
     @triggered_bomb = false
     @flag_mode = false
+    @current_coord = [0,0]
+    @image = ''
   end
 
   def seed_bombs(bombs)
@@ -45,30 +50,26 @@ class Board
       self[n_pos].increment_val
     end
   end
-
+  
   def render
-    system("clear")
-    puts "    Minesweeper "
-    puts @flag_mode ? "    Flag mode".red : "    Flip tile mode".red
-    puts "   +" + ("-" * (2 * @size - 1)) + "+"
+    @image = ''
+    @image << "\n" + "+" + ("-" * (2 * @size - 1)) + "+" + "\n"
     @grid.each_with_index do |row, row_idx|
-      print row_idx < 10 ? " #{row_idx} |" : "#{row_idx} |" 
-      row.each do |tile|
-        print tile.to_s
-        print "|"
+      @image << "|"
+      row.each_with_index do |tile, tile_idx|
+        @current_coord == [row_idx, tile_idx] ? @image << tile.to_s.black.on_white : @image << tile.to_s
+        @image << "|"
       end
-      puts 
+      @image << "\n"
     end
-    puts "   +" + ("-" * (2 * @size - 1)) + "+"
-    print "    "
-    @size.times { |num| print @alpha[num] + " " }
-    puts
+    @image << "+" + ("-" * (2 * @size - 1)) + "+"+ "\n"
+    @image << "\n"
   end
 
   def flip_tile(pos)
     tile = self[pos]
-    return tile.toggle_flag if @flag_mode && tile.hidden
-    return if tile.flag
+    # return tile.toggle_flag if @flag_mode && tile.hidden
+    # return if tile.flag
     return @triggered_bomb = true if tile.bomb
     if tile.hidden && !tile.flag
       tile.reveal
@@ -82,9 +83,9 @@ class Board
     end
   end
 
-  def toggle_flag_mode
-    @flag_mode = !@flag_mode
-  end
+  # def toggle_flag_mode
+  #   @flag_mode = !@flag_mode
+  # end
 
   def reveal_bombs
     @grid.each do |row|
